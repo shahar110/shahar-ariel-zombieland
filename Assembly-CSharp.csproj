@@ -267,6 +267,10 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\PlayerEngine.cs" />
      <Compile Include="Assets\Scripts\ScoreManager.cs" />
+     <Compile Include="Assets\Scripts\UIScene\EndGameHandler.cs" />
+     <Compile Include="Assets\Scripts\UIScene\StartGameHandler.cs" />
+     <Compile Include="Assets\Scripts\UIScene\TopTenHandler.cs" />
+     <Compile Include="Assets\Scripts\UIScene\UIManager.cs" />
      <Compile Include="Assets\Scripts\WeaponManager.cs" />
      <Compile Include="Assets\Scripts\ZombielandManager.cs" />
      <None Include="Assets\Content\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />

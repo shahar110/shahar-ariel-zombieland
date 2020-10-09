@@ -511,6 +511,12 @@
           <e p="GameManager.cs" t="Include" />
           <e p="PlayerEngine.cs" t="Include" />
           <e p="ScoreManager.cs" t="Include" />
+          <e p="UIScene" t="Include">
+            <e p="EndGameHandler.cs" t="Include" />
+            <e p="StartGameHandler.cs" t="Include" />
+            <e p="TopTenHandler.cs" t="Include" />
+            <e p="UIManager.cs" t="Include" />
+          </e>
           <e p="WeaponManager.cs" t="Include" />
           <e p="ZombielandManager.cs" t="Include" />
         </e>
