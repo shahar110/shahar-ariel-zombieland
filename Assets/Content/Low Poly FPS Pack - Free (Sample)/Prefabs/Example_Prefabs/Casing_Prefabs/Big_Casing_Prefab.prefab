@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 33696878922081650}
   - component: {fileID: 23535791786082530}
   - component: {fileID: 54982896273961646}
-  - component: {fileID: 114200287053171918}
   - component: {fileID: 82337463697939548}
+  - component: {fileID: 978596052555365432}
   m_Layer: 8
   m_Name: Big_Casing_Prefab
   m_TagString: Bullet
@@ -97,35 +97,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &114200287053171918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309345429585892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acff82b1c71481f48a9f9884f9f62d6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minimumXForce: 35
-  maximumXForce: 50
-  minimumYForce: 10
-  maximumYForce: 20
-  minimumZForce: -12
-  maximumZForce: 12
-  minimumRotation: -360
-  maximumRotation: 360
-  despawnTime: 1
-  casingSounds:
-  - {fileID: 8300000, guid: 39a52c8570aa5ee4b8c76570a3eda151, type: 3}
-  - {fileID: 8300000, guid: a422bb42207b84543bfa921cf5ad09d2, type: 3}
-  - {fileID: 8300000, guid: 031057f31153d6e4da071a851d29e9e2, type: 3}
-  - {fileID: 8300000, guid: 13f0d2cf3fe7b1744ada35cb7c1e1a4b, type: 3}
-  - {fileID: 8300000, guid: 3f8b82312021c504f8a6212dddba71f3, type: 3}
-  audioSource: {fileID: 82337463697939548}
-  speed: 2500
 --- !u!82 &82337463697939548
 AudioSource:
   m_ObjectHideFlags: 0
@@ -222,3 +193,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &978596052555365432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309345429585892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b9b34a6a8c8414d870691e97a6241b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimumXForce: 0
+  maximumXForce: 0
+  minimumYForce: 0
+  maximumYForce: 0
+  minimumZForce: 0
+  maximumZForce: 0
+  minimumRotation: 0
+  maximumRotation: 0
+  despawnTime: 0
+  casingSounds: []
+  audioSource: {fileID: 0}
+  speed: 2500

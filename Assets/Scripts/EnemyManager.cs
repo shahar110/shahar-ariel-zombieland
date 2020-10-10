@@ -11,14 +11,18 @@ public class EnemyManager : MonoBehaviour
     private Transform playerTransform;
     private Animator animController;
     private MeshCollider meshCollider;
-    private float attackDist = 4.0f;
+
+    public float distFromPlayer;
+    public float attackAnimDist = 4.0f;
+    public float damageDist = 2.0f;
     private int health = 2;
-    private int scoreVal = 4;
-    private bool isAlive = true;
-    private bool isAttacking = false;
-    private bool isDamaging = false;
-    private static int damage = 2;
+    private int scoreVal = 200;
+    public bool isAlive = true;
+    public bool isAttacking = false;
+    private static int damage = 10;
     private float speed;
+    private float attackDamageTimer = 0f;
+    private float attackDamageInterval = 5.0f;
 
     [System.Serializable]
     public class soundClips
@@ -34,101 +38,123 @@ public class EnemyManager : MonoBehaviour
     void Awake()
     {
         enemyTransofrm = this.transform;
-        nav = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        nav = GetComponent<NavMeshAgent>();
+
         animController = this.GetComponent<Animator>();
-        meshCollider = this.GetComponent<MeshCollider>();
+        nav.SetDestination(playerTransform.position);
+        
+        attackAnimDist = 4.0f;
+        damageDist = 2.0f;
+        health = 2;
+        scoreVal = 200;
+        isAlive = true;
+        isAttacking = false;
+        damage = 10;
+        attackDamageTimer = 0f;
+        attackDamageInterval = 5.0f;
     }
 
     void Update()
     {
-        nav.SetDestination(playerTransform.position);
+        distFromPlayer = Vector3.Distance(playerTransform.position, this.transform.position);
+        attackDamageTimer += Time.deltaTime;
 
-        // attack anim
-        if (Vector3.Distance(playerTransform.position, this.transform.position) < attackDist)
+        if (isAlive)
         {
-            isAttacking = true;
-            animController.SetBool("shouldAttack", true);
-        }
-        else
-        {
-            isAttacking = false;
-            animController.SetBool("shouldAttack", false);
-        }
-
-        // Is damaging
-        if(isDamaging && isAlive)
-        {
-            Invoke("incDamage", 5);
-        }
-        playSounds();
-    }
-
-    private void playSounds()
-    {
-        if (isAttacking) // Attack
-        {
-            m_audioSource.clip = SoundClips.attackSound;
-            if (!m_audioSource.isPlaying)
+            if (distFromPlayer <= attackAnimDist) // In attack range
             {
-                m_audioSource.Play();
-                m_audioSource.loop = true;
+                if (!isAttacking) // Start attacking
+                    startAttacking(distFromPlayer);
+                else if (distFromPlayer <= damageDist)// Already attacking
+                    attacking();
+            }
+            else // Out of range
+            {
+                if (!isAttacking)
+                    walking();
+                else
+                {
+                    walking();
+                    isAttacking = false;
+                }
             }
         }
-        else // Walk
+    }
+
+    private void attacking()
+    {
+        // Debug.Log("<< zombie damage interval");
+        if (attackDamageTimer >= attackDamageInterval)
+        {
+            GameManager.decHealth(damage);
+            attackDamageTimer = 0f;
+
+        }
+    }
+
+    private void startAttacking(float distnace)
+    {
+        // Debug.Log("<< zombie start attacking player");
+        isAttacking = true;
+        animController.SetBool("shouldAttack", true);
+        if (distnace <= damageDist)
+        {
+            nav.isStopped = true;
+            // Debug.Log("<< nav.isStopped = true");
+        }
+            
+        m_audioSource.clip = SoundClips.attackSound;
+        if (!m_audioSource.isPlaying)
+        {
+            // Debug.Log(this.name + "<<: start loop sound attack");
+            m_audioSource.Play();
+            m_audioSource.loop = true;
+        }
+    }
+
+    private void walking()
+    {
+        isAttacking = false;
+        animController.SetBool("shouldAttack", false);
+
+        if (!m_audioSource.isPlaying)
         {
             m_audioSource.clip = SoundClips.walkSound;
             m_audioSource.Play();
             m_audioSource.loop = true;
-            Debug.Log("<< sound walk");
+            // Debug.Log(this.name + "<< start walk sound loop");
         }
+        
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        isDamaging = true;
         Debug.Log("<< OnCollisionEnter zombie, hit with: " + other.gameObject.tag + other.gameObject.name);
         if (other.gameObject.tag == "Bullet")
         {
             health--;
-            Debug.Log("<< dec zombie helth");
-        }
-        else if (other.gameObject.tag == "Player" && isAlive) // Attacking player
-        {
-            Debug.Log("<< zombie attack player, attack points: ");
-            GameManager.decHealth(damage);
+            // Debug.Log("<< dec zombie helth");
         }
         if (health == 0 && isAlive == true)
         {
-            Debug.Log("<<  zombie dead");
+            // Debug.Log("<<  zombie dead");
+            nav.isStopped = true;
             onDeath();
         }
     }
 
-    private void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.tag == "Player")
-            isDamaging = false;
-    }
-
     void onDeath()
     {
+        // Debug.Log("<< enemyManager onDeath()");
         isAlive = false;
+        m_audioSource.loop = false;
         m_audioSource.clip = SoundClips.damageSound;
-        if (!m_audioSource.isPlaying)
-        {
-            m_audioSource.Play();
-        }
-        nav.isStopped = true;
+        m_audioSource.Play();
+        // Debug.Log(this.name + "<<: sound damage");
         animController.SetBool("isHit", true);
         GameManager.addPoints(scoreVal);
         EnemySpawner.decEnemyCount();
         Destroy(this.gameObject, 10);
-    }
-
-    public static void incDamage(int delta)
-    {
-        damage += delta;
-        Debug.Log("<<< inc damage");
     }
 }

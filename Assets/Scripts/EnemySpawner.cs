@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-// using UnityEditorInternal;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -11,15 +10,19 @@ public class EnemySpawner : MonoBehaviour
     public Transform[] spwanPoints;
 
     private static int totalActiveEnemies = 0;
+    // Spawn
     public float spawnDeltaTime = 5.0f;
-    public float timeBetweenWaves = 5.0f;
-    public int enemiesInWave = 3;
+    public int minTimeBetweenWaves = 4;
+    public int maxTimeBetweenWaves = 9;
+    private static int timeBetweenWaves;
+    public static int enemiesInWave = 7;
     private float waveCountdown;
     private SpawnState state = SpawnState.COUNTING;
 
     // Start is called before the first frame update
     void Start()
     {
+        timeBetweenWaves = getWaveTime();
         waveCountdown = timeBetweenWaves;
         Debug.Log("Start() state=" + state);
     }
@@ -42,7 +45,7 @@ public class EnemySpawner : MonoBehaviour
             if (state != SpawnState.SPAWNING)
             {
                 // Start spwaning wave
-                StartCoroutine(SpawnRound());
+                StartCoroutine(SpawnWave());
             }
         }
         else
@@ -52,7 +55,8 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnRound()
+    // Spawn wave, wait between each signle spawn 
+    private IEnumerator SpawnWave()
     {
         state = SpawnState.SPAWNING;
 
@@ -67,6 +71,7 @@ public class EnemySpawner : MonoBehaviour
         yield break;
     }
 
+    // Spawn new enemy in random spwan point prefab
     void SpawnEnemy()
     {
         GameObject newEnemy;
@@ -77,16 +82,29 @@ public class EnemySpawner : MonoBehaviour
         totalActiveEnemies++;
     }
 
+    // All enemies in wave are dead
     void WaveCompleted()
     {
         state = SpawnState.COUNTING;
-        waveCountdown = timeBetweenWaves;
+        waveCountdown = getWaveTime();
     }
 
+    // decrease enemy count = enemy dead
     public static void decEnemyCount()
     {
         totalActiveEnemies--;
     }
+
+    // Level up - increase num of enemies in each wave
+    public static void levelUp()
+    {
+        enemiesInWave++;
+        Debug.Log("Enemy Spawner levelup, enemiesInWave=");
+    }
+
+    // Generate random timer for "before starting spwning new wave"
+    private int getWaveTime()
+    {
+        return Random.Range(minTimeBetweenWaves, maxTimeBetweenWaves);
+    }
 }
-
-

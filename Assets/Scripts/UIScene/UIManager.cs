@@ -7,13 +7,8 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public static UIManager _instance;
-    public delegate void HowToPlayScreenDelegate(bool display);
-    public event HowToPlayScreenDelegate OnClick_HowToPlayScreen;
-    
-    public delegate void ExitScreenDelegate();
-    public event ExitScreenDelegate OnClick_ExitScreen;
-
-    public bool m_IsButtonCollided = false;
+    [SerializeField] public  HighscoreManager _highscoreManager;
+    public static bool IsButtonCollided { get; set; } = false;
 
     private void Awake()
     {
@@ -26,6 +21,20 @@ public class UIManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        IsButtonCollided = false;
+        // _highscoreManager = GetComponent<HighscoreManager>();
+        _highscoreManager.transform.gameObject.SetActive(false);
+    }
+
+    void Start()
+    {
+        // IsButtonCollided = false;
+    }
+
+    public static void EnableUI()
+    {
+        IsButtonCollided = false;
     }
 
     public void TestMessage()

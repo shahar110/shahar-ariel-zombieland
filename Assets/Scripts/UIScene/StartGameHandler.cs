@@ -32,18 +32,17 @@ public class StartGameHandler : MonoBehaviour
         else
         {
             m_CounterText.gameObject.SetActive(false);
-            // SceneManager.LoadScene("ShooterScene");
+            GameManager.initialize();
+            SceneManager.LoadScene("GameScene");
         }
     }
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter()
     {
-        // Debug.Log("--------------Entered Start Button Collider----------------");
-        // Debug.Log("--------------UI Manager: " + m_UIManagerController.m_IsButtonCollided + "----------------");
-        // if (!m_UIManagerController.m_IsButtonCollided)
-        // {
-            // m_UIManagerController.m_IsButtonCollided = true;
+        if (!UIManager.IsButtonCollided)
+        {
+            UIManager.IsButtonCollided = true;
             Debug.Log("Start Button Collision...");
             StartGame();
-        // }
+        }
     }
 }

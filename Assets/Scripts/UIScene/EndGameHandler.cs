@@ -5,20 +5,21 @@ using UnityEngine;
 
 public class EndGameHandler : MonoBehaviour
 {
-    void OnCollisionEnter(Collision other)
-    {
-        Debug.Log("End Game Collision...");
-    }
+    [SerializeField] private UIManager m_UIManagerController;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_UIManagerController  =  UIManager._instance;
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    void OnCollisionEnter()
     {
-        
+        if (!UIManager.IsButtonCollided)
+        {
+            UIManager.IsButtonCollided = true;
+            Debug.Log("TopTen Button Collision...");
+            Application.Quit();
+        } 
     }
 }

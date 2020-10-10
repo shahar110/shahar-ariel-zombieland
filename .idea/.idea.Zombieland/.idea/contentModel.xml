@@ -513,6 +513,8 @@
           <e p="ScoreManager.cs" t="Include" />
           <e p="UIScene" t="Include">
             <e p="EndGameHandler.cs" t="Include" />
+            <e p="ExitHighscoreHandler.cs" t="Include" />
+            <e p="HighscoreManager.cs" t="Include" />
             <e p="StartGameHandler.cs" t="Include" />
             <e p="TopTenHandler.cs" t="Include" />
             <e p="UIManager.cs" t="Include" />
